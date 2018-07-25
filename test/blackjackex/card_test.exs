@@ -3,7 +3,7 @@ defmodule Blackjackex.CardTest do
   alias Blackjackex.Card
 
   test "returns a card based on suit and value" do
-    card = Card.new(value: 1, suit: "hearts")
-    assert card |> Card.describe == "One of hearts"
+    card = Card.new(value: "A", suit: "Spades")
+    assert card |> Card.describe == "Ace of Spades"
   end
 end

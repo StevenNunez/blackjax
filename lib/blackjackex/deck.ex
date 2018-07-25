@@ -5,7 +5,7 @@ defmodule Blackjackex.Deck do
 
   def new do
     suits = ["hearts", "spades", "clubs", "diamonds"]
-    values = Enum.into(1..10, ["J", "Q", "K"])
+    values = Enum.into(2..10, ["J", "Q", "K", "A"])
 
     available = for suit <- suits, value <- values do
       Card.new(value: value, suit: suit)
@@ -18,12 +18,15 @@ defmodule Blackjackex.Deck do
     %Deck{available: available, dealt: dealt}
   end
 
-  def deal(%Deck{available: available, dealt: dealt}, random_function \\ &:rand.uniform/1) do
+  def deal(deck, random_function \\ &:rand.uniform/1) # Not sure why I need this.
+  def deal(%Deck{available: []} = deck, _), do: {:error, deck}
+  def deal(%Deck{available: available, dealt: dealt}, random_function) do
     selected_card_index = available
                           |> length
                           |> random_function.()
+
     {card, available} = List.pop_at(available, selected_card_index - 1)
-    deck = Deck.new(available: available, dealt: dealt ++ [card])
+    deck = Deck.new(available: available, dealt: [card | dealt])
 
     {:ok, deck, card}
   end
